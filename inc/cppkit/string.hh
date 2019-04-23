@@ -1,7 +1,9 @@
 #pragma once
 
 #include <cstdio>
-#include<string>
+#include <string>
+
+#include "validation_macros.h"
 
 
 namespace cppkit {
@@ -31,41 +33,57 @@ std::string strfmt(
 /// ```cpp
 ///     StringTokenGenerator tokens("a,b,c,", ',');
 ///     while (tokens.has_next()) {
-///         std::string_view t = tokens.next()
+///         std::string_view t = tokens.next();
 ///         ...
 ///     }
 /// ```
+/// or
+/// ```cpp
+///     StringTokenGenerator tokens("a,b,c", ',');
+///     for(; tokens.has_next(); tokens.next()) {
+///         process_token(tokens.peek());
+//      }
+/// ```
 ///
+template<class S>
 //-------------------------------------
-class StringTokenGenerator {
+class TokenGenerator {
 //-------------------------------------
 private:
     void go_next_j_() {
-        while ((j_ <= str_.size()) && (str_[j_] != sep_)) ++j_;
+        while ((j_ < str_.size()) && (str_[j_] != sep_)) ++j_;
     }
 
-    const std::string &str_;
+    const S str_;
     const char sep_;
     std::size_t i_ = 0;     /// token begin index
     std::size_t j_ = 0;     /// token end index
 
 public:
-    StringTokenGenerator(const std::string &s, const char &sep)
-        : str_(s), sep_(sep)
-    { go_next_j_(); }
+    TokenGenerator(const S &s, const char &sep)
+        : str_(s)
+        , sep_(sep)
+        { go_next_j_(); }
 
-    bool has_next() const {
-        return i_ < str_.size();
+    bool has_next() const
+        { return i_ < str_.size(); }
+
+    S peek() const {
+        CHECK( (i_ <= str_.size()) && (j_ <= str_.size()) );
+        return std::move(str_.substr(i_, j_-i_));
     }
 
-    std::string next() {
-        const auto &x = str_.substr(i_, j_-i_);
+    S next() {
+        const auto &x = peek();
         i_ = j_++ + 1;
-        // printf("%d (%lu, %lu]  ", __LINE__, i_, j_);
         go_next_j_();
         return std::move(x);
     }
 };
+
+using StringTokenGenerator = TokenGenerator<std::string>;
+// Alternative:
+// using StringViewTokenGenerator = TokenGenerator<std::string_view>;
 
 
 } // namespace cppkit

@@ -17,7 +17,7 @@ struct RuntimeCheckFailedError : public std::runtime_error {
 
 #define CHECK_MSG(cond, msg) do {                                           \
     if (!(cond)) {                                                          \
-        throw RuntimeCheckFailedError(                                      \
+        throw cppkit::RuntimeCheckFailedError(                              \
             std::string("\n----------------------------------------")       \
                 + "\n  CHECK FAILED:"                                       \
                 + "\n  " + STR(cond) +                                      \

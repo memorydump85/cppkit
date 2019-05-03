@@ -2,20 +2,20 @@
 
 #include "validation_macros.h"
 
-/**
- * Macro for defining unit-tests. Defines as a destructor-type function
- * that is automatically invoked `after` main exits.
+
+/// Macro for defining unit-tests. Defines as a destructor-type function
+/// that is automatically invoked `after` main exits.
  *
- * `__attribute__ ((destructor))` is used instead of
- * `__attribute__ ((constructor))` because constructor-type functions
- * seem to be invoked before static variables are initialized.
- */
+/// `__attribute__ ((destructor))` is used instead of
+/// `__attribute__ ((constructor))` because constructor-type functions
+/// seem to be invoked before static variables are initialized.
+///
 #define DEFINE_TEST(FUNC)                               \
     __attribute__ ((destructor)) void FUNC()            \
 
-/**
- * Ensures that `code` throws an `exc_type` exception.
- */
+
+/// Ensures that `code` throws an `exc_type` exception.
+///
 #define MUST_THROW(code, exc_type) do {                 \
     bool exception_thrown = false;                      \
     try {                                               \

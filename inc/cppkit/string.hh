@@ -9,8 +9,7 @@
 namespace cppkit {
 
 
-///
-/// @brief printf style formatter that returns std::string
+/// `printf` style formatter that returns `std::string`
 ///
 template<typename ... Args>
 std::string strfmt(
@@ -26,14 +25,13 @@ std::string strfmt(
 }
 
 
-///
-/// @brief Generates tokens from a `std::string`
+/// Generate tokens from a `std::string`
 ///
 /// Example:
 /// ```cpp
 ///     StringTokenGenerator tokens("a,b,c,", ',');
 ///     while (tokens.has_next()) {
-///         std::string_view t = tokens.next();
+///         auto t = tokens.next();
 ///         ...
 ///     }
 /// ```
@@ -82,6 +80,7 @@ public:
 };
 
 using StringTokenGenerator = TokenGenerator<std::string>;
+
 // Alternative:
 // using StringViewTokenGenerator = TokenGenerator<std::string_view>;
 

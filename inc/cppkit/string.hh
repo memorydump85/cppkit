@@ -43,6 +43,9 @@ std::string strfmt(
 //      }
 /// ```
 ///
+/// When the `ignore_consecutive` parameter is set to `true`,
+/// consecutive seperators are as a single separator.
+///
 template<class S>
 //-------------------------------------
 class TokenGenerator {
@@ -54,13 +57,18 @@ private:
 
     const S str_;
     const char sep_;
+    const bool ignore_consecutive_;
     std::size_t i_ = 0;     /// token begin index
     std::size_t j_ = 0;     /// token end index
 
 public:
-    TokenGenerator(const S &s, const char &sep)
+    TokenGenerator(
+        const S &s,
+        const char &sep,
+        const bool &ignore_consecutive = false )
         : str_(s)
         , sep_(sep)
+        , ignore_consecutive_(ignore_consecutive)
         { go_next_j_(); }
 
     bool has_next() const
@@ -73,7 +81,11 @@ public:
 
     S next() {
         const auto &x = peek();
-        i_ = j_++ + 1;
+        i_ = j_ + 1;
+        if (ignore_consecutive_) {
+            while(str_[i_] == sep_) ++i_;
+        }
+        j_ = i_;
         go_next_j_();
         return std::move(x);
     }

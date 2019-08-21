@@ -21,7 +21,7 @@ struct RuntimeCheckFailedError : public std::runtime_error {
             std::string("\n----------------------------------------")       \
                 + "\n  CHECK FAILED:"                                       \
                 + "\n  " + STR(cond) +                                      \
-                + "\n    in function " + __FUNCTION__ +                     \
+                + "\n    in function " + __PRETTY_FUNCTION__ +              \
                 + "\n    in file " + STR(__FILE__) + ":" + STR(__LINE__)    \
                 + "\n  " + msg                                              \
                 + "\n----------------------------------------"              \
